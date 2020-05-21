@@ -1,0 +1,16 @@
+baseURL = "http://ojizero.tech/blog"
+languageCode = "en-us"
+title = "ojizero/blog"
+# theme = "hello-friend"
+
+# [params]
+#   # dir name of your blog content (default is `content/posts`)
+#   # contentTypeName = "posts"
+
+#   defaultTheme = "dark"
+
+#   # if you set this to 0, only submenu trigger will be visible
+#   # showMenuItems = 2
+
+#   # # Show reading time in minutes for posts
+#   # showReadingTime = true
