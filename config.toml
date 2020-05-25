@@ -6,3 +6,7 @@ theme = "hello-friend"
 [params]
   defaultTheme = "dark"
   showReadingTime = true
+
+[languages]
+  [languages.en.params.logo]
+    logoText = 'ojizero/blog'
