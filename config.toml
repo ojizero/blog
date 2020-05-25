@@ -1,4 +1,4 @@
-baseURL = "http://ojizero.tech/blog"
+baseURL = "https://blog.ojizero.tech"
 languageCode = "en-us"
 title = "ojizero/blog"
 theme = "hello-friend"
