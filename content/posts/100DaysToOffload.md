@@ -7,7 +7,7 @@ tags: [100 Days]
 
 > Writing is hard!
 
-Writing is hard, pouring one's thoughts (some could say soul?) into a written form, then sharing it for the anyone to see. It the hardship begins before you even begin to write, what should you write about after all? What goal are trying to achieve? Will let's try and figure this out!
+Writing is hard, pouring one's thoughts (some could say soul?) into a written form, then sharing it for the anyone to see. And this hardship begins before you even begin to write, what should you write about after all? What goal are trying to achieve? Will let's try and figure this out!
 
 ## The Why
 
@@ -23,7 +23,7 @@ And maybe the occasional non-technical post, who knows! The import part is to st
 
 ## Perfect, an enemy of done?
 
-There are many enemies for finish a thing, perhaps the strongest of those enemies if perfection! Nothing is prefect, and striving for it will only bring delays, maybes, and nothing could be done.
+There are many enemies for finishing a thing, perhaps the strongest of those enemies if perfection! Nothing is prefect, and striving for it will only bring delays, maybes, and nothing could be done.
 
 So let's start now, no need for things to be perfect, no need for things be flawless, but they need to be "done", in order to improve such that the next time you start, you'll be a touch closer to that impossible perfection. So here we go with the bad writing :D
 
