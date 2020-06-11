@@ -41,12 +41,25 @@ An example were we do want multiple machines to have the exact same versions of 
 
 Alright, now that we've quickly given some small context around package management and (some of) the hurdles it tries to fix! Let's get started with a quick primer on Nix, and how it attempts to solve package management. We won't dive into details just yet, let's first just get to know a little about Nix and how it works.
 
-Nix applies concepts taken from functional programming to try and solve the problem of package management, in essence it treats the whole state of the environment it manages as an immutable object, and only ever applies to it atomic operations to transform this state not mutate it.
+Nix applies concepts taken from functional programming to try and solve the problem of package management, in essence it treats the whole state of the environment it manages as an immutable object, and only ever applies to it atomic operations to transform this state, never mutating it.
 
 This has the nice side effect that pretty much any operation done by Nix, can be rolledback at any given point in time. In essence this versions the whole environment (system) state, so you can perform (almost?) any operation safely, since at the worse case you can just run `nix-env --rollback` and be back to the previous state of the system.
 
+Whenever you install anything, Nix would install it in a folder called the Nix store, typically in the path `/nix/store`. Each installed package is a self contained unit with all of its dependencies referenced, and is cryptographically hashed to ensure the content and versions of the package and its dependencies.
 
+When you want to use the installed package, what you're really using is a symlink found in your Nix profile that points to the actual package. The Nix profile acts like a dictionary mapping the packages you installed to their appropriate versions and paths.
 
+In practice this is extended to include even the configurations of the installed package, so you can share these configs by simply reusing the installed path for them, or setting any new profile to use them.
+
+An example for user environments, taken from the [NixOS manual on user profiles](https://nixos.org/nix/manual/#sec-profiles) is shown below.
+
+![User environments diagram](https://nixos.org/nix/manual/figures/user-environments.png)
+
+This effectively allows even multiple users, to install multiple versions of packages, even if they have conflicting versions or have conflicting dependencies. Since each package refers to symlinks to the proper versions of their dependencies and each package/dependency is identified by it's hash instead of name (at the lowest level).
+
+It also allows for easy rollbacks since you would just revert to using an older profile version, that refers to the older symlinks. In a sense, these profiles represent the state of the system at some point in time, and they are versioned so you can switch between them easily.
+
+Another neat side effect from this, is that anything that is installed as a dependency is only ever used but what depends on it, you can't really see or use it yourself. For example if you install something that depends on some library, you can't easily access this library from any global point, unless you install it explicitly. This immediately fixes the problem were you could depend on some globally installed dependency, that "disappears" when you remove whatever dependended on it.
 
 
 <!-- In the next posts, we'll dive a bit deeper into Nix expressions and how they relate to Nix the package manager -->
