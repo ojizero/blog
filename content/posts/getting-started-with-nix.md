@@ -75,7 +75,7 @@ TL;DR:
 
 Alright, so before we end this part, let's do a little experiment to show off the above jargon in action. I'm starting of from a freshly pulled `nixos/nix` Docker image just for the sake of experimentation for now.
 
-The thing we need to know for this example is that to install a package we use the command `nix-env -i <pkgname>`, this is the only option available, but that's not the focus of our example or this post just yet!
+The thing we need to know for this example is that to install a package we use the command `nix-env -i <pkgname>`, this isn't the only option available, but that's not the focus of our example or this post just yet!
 
 Okay, now that that's out of the way, off to our dummy demo! Let's start by installing AWS CLI by running `nix-env -i awscli`, here we are instructing Nix to install a package named Git for us, if we check the logs we find the following,
 
@@ -199,7 +199,7 @@ created 42 symlinks in user environment
 ```
 </details>
 
-Here we can see that when installing the AWS CLI, Python 3 was installed as a dependency, in a normal package manager, this would mean now we can use this installed Bash since it would be installed globally, so let's try and get the version of Python3 on the `nixos/nix` image.
+Here we can see that when installing the AWS CLI, Python 3 was installed as a dependency, in a normal package manager, this would mean now we can use this installed Python since it would be installed globally, so let's try and get the version of Python3 on the `nixos/nix` image.
 
 ```
 $ python3 --version
