@@ -1,7 +1,7 @@
 ---
 title: "Getting Started with Nix"
-date: 2020-06-01T13:38:53+03:00
-draft: true
+date: 2020-06-11T01:31:00+03:00
+draft: false
 tags: [100 Days, nixology]
 ---
 
@@ -13,7 +13,7 @@ The Nix package manager has been, on and off, on my radar for a couple of years 
 
 Pretty much every system has it's own package management solution, be it a native solution or a community built one, from operating systems and the likes APT or Pacman (and much much more) in the Linux world, to HomeBrew and MacPorts (and probably more) in the world of macOS, even Windows with Chocolatey (and probably more)!
 
-This isn't strictly limited to operating systems, userland systems also have their own package management, like Cargo, GoMods, NPM, RubyGems, and more. Pretty much every toolkit or development kit uses some form of package management somewhere.
+This isn't strictly limited to operating systems, userland systems also have their own package managers, like Cargo, GoMods, NPM, RubyGems, and more. Pretty much every toolkit or development kit uses some form of package management somewhere.
 
 ### Dependency hell
 
@@ -35,9 +35,9 @@ What the heck does that have to do with package management I hear you say? Will 
 
 This ends us up in the unfortunate state were we can't really reproduce a certain installation of tools across multiple machines, or installations of OS, without some tedious manual labour, and even with that it may be to no avail!
 
-An example were we do want multiple machines to have the exact same versions of tools installed is when multiple people develop some project, and each person has slightly different version of some tool, have fun managing all that when each dev environment is different and unique, and try to debug why it builds on your machine and not on your collegues!
+An example where we do want multiple machines to have the exact same versions of tools installed is when multiple people develop some project, and each person has slightly different version of some tool, have fun managing all that when each dev environment is different and unique, and try to debug why it builds on your machine and not on your collegues!
 
-## An initial, brief, primer in Nix
+## An initial, very brief, primer in Nix
 
 Alright, now that we've quickly given some small context around package management and (some of) the hurdles it tries to fix! Let's get started with a quick primer on Nix, and how it attempts to solve package management. We won't dive into details just yet, let's first just get to know a little about Nix and how it works.
 
@@ -59,7 +59,7 @@ This effectively allows even multiple users, to install multiple versions of pac
 
 It also allows for easy rollbacks since you would just revert to using an older profile version, that refers to the older symlinks. In a sense, these profiles represent the state of the system at some point in time, and they are versioned so you can switch between them easily.
 
-Another neat side effect from this, is that anything that is installed as a dependency is only ever used but what depends on it, you can't really see or use it yourself. For example if you install something that depends on some library, you can't easily access this library from any global point, unless you install it explicitly. This immediately fixes the problem were you could depend on some globally installed dependency, that "disappears" when you remove whatever dependended on it.
+Another neat side effect from this, is that anything that is installed as a dependency is only ever used but what depends on it, you can't really see or use it yourself. For example if you install something that depends on some library, you can't easily access this library from any global point, unless you install it explicitly. This immediately fixes the problem where you could depend on some globally installed dependency, that "disappears" when you remove whatever dependended on it.
 
 ### Installation
 
@@ -71,14 +71,11 @@ TL;DR:
   - You can use docker `docker run -it nixos/nix`.
   - Or you can install it in some VM.
 
-## Nix store and profiles in action
+### Nix store and profiles in action
 
 Alright, so before we end this part, let's do a little experiment to show off the above jargon in action. I'm starting of from a freshly pulled `nixos/nix` Docker image just for the sake of experimentation for now.
 
-First, this is the list of Nix commands we'll be needing, they all come from the `nix-env` binary.
-
-- `nix-env -i <pkg-name>`: used to install some package.
-- `nix-env --rollback`: used to rollback the state of the system.
+The thing we need to know for this example is that to install a package we use the command `nix-env -i <pkgname>`, this is the only option available, but that's not the focus of our example or this post just yet!
 
 Okay, now that that's out of the way, off to our dummy demo! Let's start by installing AWS CLI by running `nix-env -i awscli`, here we are instructing Nix to install a package named Git for us, if we check the logs we find the following,
 
@@ -211,9 +208,9 @@ $ python --version
 /bin/sh: python: not found
 ```
 
-Oh, not exactly what we expect, for some reason Python isn't "installed", but how come so. Well this is the magic of symlinks coupled with the Nix store and Nix profiles! Although Python was installed to satisfy AWS CLI, it was not globally added anywhere, so the system isn't aware that Python exists, thus if I have a conflciting version of Python I would have no issues what so ever.
+Oh, not exactly what we expect, for some reason Python isn't "installed", but how come so. Well this is the magic of symlinks coupled with the Nix store and Nix profiles (remember the diagram earlier)! Although Python was installed to satisfy AWS CLI, it was not globally added anywhere, so the system isn't aware that Python exists, thus if I have a conflciting version of Python I would have no issues what so ever.
 
-And if say I wanna write anything in Python and later remove the AWS CLI I won't be surprised that Python doesn't exist after removing the AWS CLI, because Python isn't "installed" I have to explicitly install it to be able to use it thus preventing it from being deleted should I remove the AWS CLI!
+And if say I wanna write anything in Python and later remove the AWS CLI I won't be surprised that Python doesn't exist after removing the AWS CLI, because Python wasn't "installed" I have to explicitly install it to be able to use it thus preventing it from being deleted should I remove the AWS CLI at any point!
 
 Python is still installed somewhere in the system, specifically in the Nix store, from the log you can tell it was installed to `/nix/store/ihy2vly61ndky6qlv1q4dfdiv28vszkh-python3-3.7.7`, so let's check that folder out!
 
@@ -241,4 +238,8 @@ $ python3 --version
 Python 3.8.3
 ```
 
-The thing to note from the Alpine example is that Python 3 was gobally installed, thus if I already had a version of it conflciting with what the AWS CLI wanted I could be in trouble! Or if I needed a version that is incompatible with AWS CLI I would be blocked and have to do some kind of workaround to get both the AWS CLI and the version of Python I want!
+The thing to note from the Alpine example is that Python 3 was globally installed, thus if I already had a version of it conflciting with what the AWS CLI wanted I could be in trouble! Or if I needed a version that is incompatible with AWS CLI I would be blocked and have to do some kind of workaround to get both the AWS CLI and the version of Python I want!
+
+Okay, I've been dragging on and on about how cool Nix is! And I hope I demoed it well and excited you to check it out. Much more details can of course be found in the [Nix manual](https://nixos.org/nix/manual/) and [Burke Libbey's playlist Nixology](https://www.youtube.com/playlist?list=PLRGI9KQ3_HP_OFRG6R-p4iFgMSK1t5BHs).
+
+In the next posts, we'll dive in a (little by little) deeper into Nix, talking about Nix expression language, other features of it, and potentially how to integrate it will into any workflow!
