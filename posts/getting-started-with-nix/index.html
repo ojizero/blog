@@ -112,7 +112,7 @@ copying path '/nix/store/ijax7siria3laky7c3dg515725z5w9lw-python3.7-s3transfer-0
 copying path '/nix/store/kl1crmayilmk5f4wlafsv6cxs1cgczz5-awscli-1.17.13' from 'https://cache.nixos.org'...
 building '/nix/store/cd9b8y0z1xav9g1llzp8y5gnwixinj02-user-environment.drv'...
 created 42 symlinks in user environment
-</code></pre></details><p>Here we can see that when installing the AWS CLI, Python 3 was installed as a dependency, in a normal package manager, this would mean now we can use this installed Bash since it would be installed globally, so let&rsquo;s try and get the version of Python3 on the <code>nixos/nix</code> image.</p><pre><code>$ python3 --version
+</code></pre></details><p>Here we can see that when installing the AWS CLI, Python 3 was installed as a dependency, in a normal package manager, this would mean now we can use this installed Python since it would be installed globally, so let&rsquo;s try and get the version of Python3 on the <code>nixos/nix</code> image.</p><pre><code>$ python3 --version
 /bin/sh: python3: not found
 $ python --version
 /bin/sh: python: not found
