@@ -10,3 +10,7 @@ theme = "hello-friend"
 [languages]
   [languages.en.params.logo]
     logoText = 'ojizero/blog'
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true

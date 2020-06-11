@@ -231,8 +231,6 @@ Python 3.7.7
 Doing the same thing in another package manager, say APK from Alpine Linux leads to a different result.
 
 ```
-$ docker run -it alpine
---- snip ---
 $ apk update
 --- snip ---
 $ apk add aws-cli
