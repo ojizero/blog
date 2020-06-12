@@ -17,7 +17,7 @@ This isn't strictly limited to operating systems, userland systems also have the
 
 ### Dependency hell
 
-Dependency hell is a term refering to a plethora of nasty problems and hardships in managng dependencies, package managers have the responsibility of finding solutions to this, exteremely hard, problem!
+Dependency hell is a term refering to a plethora of nasty problems and hardships in managing dependencies, package managers have the responsibility of finding solutions to this, exteremely hard, problem!
 
 Those set of problems include, but not limited to, conflicting versions required for dependencies. Depending on dependencies required by another package, ther other package is gone, removed or whatever, the dependent is now broke cause the dependency is gone!
 
@@ -242,4 +242,4 @@ The thing to note from the Alpine example is that Python 3 was globally installe
 
 Okay, I've been dragging on and on about how cool Nix is! And I hope I demoed it well and excited you to check it out. Much more details can of course be found in the [Nix manual](https://nixos.org/nix/manual/) and [Burke Libbey's playlist Nixology](https://www.youtube.com/playlist?list=PLRGI9KQ3_HP_OFRG6R-p4iFgMSK1t5BHs).
 
-In the next posts, we'll dive in a (little by little) deeper into Nix, talking about Nix expression language, other features of it, and potentially how to integrate it will into any workflow!
+In the next posts, we'll dive in a (little by little) deeper into Nix, talking about Nix expression language, other features of it, and potentially how to integrate it well into any workflow!
