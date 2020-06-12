@@ -14,3 +14,10 @@ theme = "hello-friend"
 [markup]
   [markup.goldmark.renderer]
     unsafe = true
+
+[menu]
+  [[menu.main]]
+    identifier = "github"
+    name = "GitHub"
+    url = "https://github.com/ojizero"
+    weight = -110
