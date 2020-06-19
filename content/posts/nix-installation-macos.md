@@ -29,6 +29,8 @@ Following is a diagram of APFS, courtesy of [https://bombich.com](https://bombic
 
 Volume groups are directly observable when you upgrade to macOS Catlina, as you will notice if you open the Disk Utility that the volume your OS used to have is split in two, "Macintosh HD" and "Macintosh HD - Data". Even though from a user precpetive they are treated as one single entity, both in Finder and in the terminal.
 
+![Disk Utility showing the volumes split](/images/nix-catalina/apfs/disk-utility-volumes.png)
+
 ### Read only root system volume
 
 > [macOS Catalina runs in a dedicated, read-only system volume — which means it is completely separate from all other data and helps improve the reliability of macOS.](https://www.apple.com/macos/catalina/features/#security)
@@ -43,11 +45,9 @@ In order to make the volumes split transparent APFS supports what's called **fir
 
 An great example of this is the `/Users` folder, it appears to reside in the root of the filesystem, but in reality it exists in the data volume, the `/Users` we see is a firmlink between the system readonly volume and the actual folder in the data volume!
 
-You can list all system firmlinks by viewing the `/usr/share/firmlinks` file.
+You can list all system firmlinks by viewing the `/usr/share/firmlinks` file. In this diargram taken from the Apple WWDC2019 presentation on APFS changes, you can see an example of how firmlinks are placed.
 
-Firmlinks allow you to transperantly link up one volume as a folder in another, this can be used to give the illusion of writing to the system volume even though it's in read only mode always. There are multiple istances of this, Applications folder, user home folder, ... etc. But firmlinks are only allowed to be used by macOS itself, not by any userland programs.
-
-`synthetic.conf` is the only way that macOS exposes a limited set of firmlinks capabilities for end users. ...
+![APFS firmlinks example](/images/nix-catalina/apfs/firmlinks-in-action-wwdc-presentation-slides.png)
 
 ### Writing to root volume
 
