@@ -21,7 +21,7 @@ Partitions in APFS contain exactly one container, and containers contain inside 
 
 As an example of the quality of life improvements introduced by containers allowing inner volumes to resize dynamic, [taken from Apples APFS reference](https://developer.apple.com/support/downloads/Apple-File-System-Reference.pdf), a drive can be configured with two bootable volumes — one with a shipping version of macOS and one with a beta version — as well as a user data volume. All three of these volumes share free space, meaning you donʼt have to decide ahead of time how to divide space between them.
 
-After the release of macOS Catalina, Apple introduces a fancy new concepts to APFS called volume groups. Volume groups ar a logical grouping of multiple volumes within a container, it allows the system to treat them in a special way, and creates the illusion that these two separate volumes are one.
+After the release of macOS Catalina, Apple introduces a fancy new concept to APFS called volume groups. Volume groups are a logical grouping of multiple volumes within a container, it allows the system to treat them in a special way, and creates the illusion that these two separate volumes are one.
 
 Following is a diagram of APFS, courtesy of [https://bombich.com](https://bombich.com/kb/ccc5/working-apfs-volume-groups)
 
@@ -51,7 +51,48 @@ You can list all system firmlinks by viewing the `/usr/share/firmlinks` file. In
 
 ### Writing to root volume
 
-<!-- To write to the system root volume ... -->
+Alright, alright, that's like cool I guess or whatever, but how do I write to the root of my system? How do I add a new folder under `/`? Welp, you kinda can't, or rather you can but you have to go through something called `synthetic.conf`.
+
+You see, since the root volume is now readonly, you literally cannot write to it, unless you go jumping through hoops to reenable writing to it by disabling SIP, rebooting, re`mount`ing to volume with write access, doing the write stuff. Oh, and none of that persists between reboots, so ... yaay! Let's just ignore that this is even an option, and focus on the next best thing, `synthetic.conf`.
+
+So remember firmlinks from before right, macOS provides a mechanism for creating user controlled firmlinks. Those "synthetic links" can be created by adding entries to the `/etc/synthetic.conf`. Those entries follow the same formate found in the system firmlinks in `/usr/share/firmlinks`, except those are meant to be managed by the user for whatever purposes there are!
+
+Alright let's do just that, let's create a folder in the system volume were we can write stuff freely! It's relatively simple to do so, first we need to add an entry to the `/etc/synthetic.conf` file declaring the folder we wanna create, say `/blah`, now the syntax of synthetic.conf is simple, it's a tab separated list of files, the following is the syntax of this file, for more details you can open a terminal and run `man synthetic.conf` it's a very short on point manual.
+
+<!-- TODO: notice we aren't using `/` at the start because it is always relative to root -->
+Ok, so we can just run this command `echo 'blah	Users/<your-user-name>/blah' | sudo tee -a /etc/synthetic.conf` and magically we'll create this file/filder under root if missing and link it up with the writable folder under our user! One reboot later, and baam! We have ourselves a writable folder under `/blah`.
+
+We can now write to root, will not really but close enough for pretty much all pruposes!
+
+```
+# if we list folder in the root and grep for blah here's our synthetic link
+$ ls / | grep blah
+lrwxr-xr-x   1 root wheel   14 Jun 20 23:20 blah -> Users/oji/blah
+
+# trying to create a file under it fails since the actual folder doesn't exist
+$ touch /blah/foobarr
+touch: /blah/foobarr: No such file or directory
+
+$ mkdir ~/blah
+
+$ touch /blah/foobarr
+
+$ ls /blah
+lrwxr-xr-x 1 root wheel 14 Jun 20 23:20 /blah -> Users/oji/blah
+
+$ ls /blah/
+total 0
+-rw-r--r-- 1 oji staff 0 Jun 27 16:10 foobarr
+
+$ ls ~/blah/
+total 0
+-rw-r--r-- 1 oji staff 0 Jun 27 16:10 foobarr
+```
+
+Things to note here are the strict use of **tabs** in the synthetic.conf file, and the fact that files aren't preceeded by `/` in their entries, adding `/` would cause them to not be created. I assume this is because they are always assumed to be relative to the root folder.
+
+Also notice how these user created firmlinks are behaving like symlink here. In truth I kinda lied when I called them user created firmlink, firmlinks are exclusively reserved only for the OS those are "synthetic symbolic link" they are virtual symlinks that are managed by the OS as if
+they are firmlinks, but they behave more similarly to normal symlinks to the end users, aside from the fact they can only be created/destroyed at boot time.
 
 ## Installing Nix
 
@@ -76,3 +117,5 @@ The officially endorsed way for installing Nix on macOS is by utilizing the `syn
 - [macOS Catalina Boot Volume Layout](https://eclecticlight.co/2019/10/08/macos-catalina-boot-volume-layout/)
 - [Creating root-level directories and symbolic links on macOS Catalina](https://derflounder.wordpress.com/2020/01/18/creating-root-level-directories-and-symbolic-links-on-macos-catalina/)
 - [What’s New in Apple Filesystems presentation slides](https://devstreaming-cdn.apple.com/videos/wwdc/2019/710aunvynji5emrl/710/710_whats_new_in_apple_file_systems.pdf)
+- [Creating root-level directories and symbolic links on macOS Catalina](https://derflounder.wordpress.com/2020/01/18/creating-root-level-directories-and-symbolic-links-on-macos-catalina/)
+- [macOS Catalina: Read-Only Boot Volume Precludes Use of Top-Level File System Namespace / Paths](https://macperformanceguide.com/blog/2019/20191219_0800-macOS-Catalina-TopLevelFileSystemNamespace.html)
